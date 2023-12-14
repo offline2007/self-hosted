@@ -17,7 +17,7 @@ services:
   minio:
     image: minio/minio
     command: server /data
-    env_file: ../.env
+    env_file: .env
     volumes:
       - ./data/minio:/data
     restart: always
@@ -26,7 +26,7 @@ services:
   caddy:
     image: caddy
     restart: always
-    env_file: ../.env
+    env_file: .env
     ports:
       - "80:80"
       - "443:443"
@@ -38,7 +38,7 @@ services:
   # API server (delta)
   api:
     image: ghcr.io/revoltchat/server:20230704-1
-    env_file: ../.env
+    env_file: .env
     depends_on:
       - database
       - redis
@@ -48,7 +48,7 @@ services:
   # Events service (quark)
   events:
     image: ghcr.io/revoltchat/bonfire:20230704-1
-    env_file: ../.env
+    env_file: .env
     depends_on:
       - database
       - redis
@@ -58,7 +58,7 @@ services:
   # Web App (revite)
   web:
     image: ghcr.io/revoltchat/client:master
-    env_file: ../.env
+    env_file: .env
     depends_on:
       - caddy
     restart: always
@@ -66,7 +66,7 @@ services:
   # File server (autumn)
   autumn:
     image: ghcr.io/revoltchat/autumn:1.1.10
-    env_file: ../.env
+    env_file: .env
     depends_on:
       - database
       - createbuckets
@@ -87,7 +87,7 @@ services:
     image: minio/mc
     depends_on:
       - minio
-    env_file: ../.env
+    env_file: .env
     entrypoint: >
       /bin/sh -c "
       while ! curl -s --output /dev/null --connect-timeout 1 http://minio:9000; do echo 'Waiting minio...' && sleep 0.1; done;
